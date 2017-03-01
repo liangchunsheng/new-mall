@@ -1,0 +1,212 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<LINK rel="Bookmark" href="/favicon.ico" >
+<LINK rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>html5.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>respond.min.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>PIE_IE678.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>Hui-iconfont/1.0.7/iconfont.css" />
+<!-- <link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>icheck/icheck.css" /> -->
+<link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/iCheck/1.0.2/skins/square/_all.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>layui/css/layui.css" />
+
+<!--[if IE 6]>
+<script type="text/javascript" src="http://<{$Think.const.LIB_URL}>.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+<title>新建网站角色 - 管理员管理 - H-ui.admin v2.3</title>
+<meta name="keywords" content="H-ui.admin v2.3,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v2.3，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+<style type="text/css">
+	#btn_pers{background-color: #43CD80;opacity: 0.8}
+	#btn_pers:hover{background-color: #43CD80;opacity: 1}
+	.radios{/*background-color: red;*/}
+	/*lable.valid{color:green;}*/
+	label.valid {
+		background: url('<{$Think.const.IMG_URL}>checked.gif') no-repeat;
+		display: block;
+		width: 16px;
+		height: 16px;
+	}
+	.permission-list2 .spans{cursor: move;border: 1px solid #777;height: 30px;display: inline-block;line-height: 30px;padding-right: 5px;padding-left: 5px;vertical-align: middle;}
+	/*.novaild label.valid{display: none;}*/
+	.sortable2{}
+</style>
+</head>
+<body>
+<article class="page-container">
+	<div class="row">
+		<div class="col-xs-8 col-sm-10 text-center">
+			<span style="font-size: 20px; color: red;">排序权限节点</span>
+		</div>
+		<div class="col-xs-4 col-sm-2">
+			<a class="" onClick="history.go(-1)"><< 返回</a>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="formControls col-xs-12 col-sm-10 col-sm-offset-1 novaild" id="sortbox">
+			<foreach name="role0" item="vo" key="key">
+			<!-- <div id="sortable3<{$key}>"> -->
+				<dl class="permission-list">
+					<dt class="p_first_dt" style="background-color: #ddd;">
+						<label class="name1" ids="<{$vo.id}>" weight="<{$vo.weight}>"><{$vo.name}></label>
+					</dt>
+					<dd id="sortable2<{$key}>" class="sortable2">
+					<foreach name="vo.child" item="va" key="k">
+						<dl class="cl permission-list2">
+						<!-- <div class="row"> -->
+							<dt class="col-xs-3 col-sm-4"><span class="name3" ids=" <{$va.id}>:"></span>
+								&nbsp;&nbsp;<span class="name2" ids="<{$va.id}>" weight="<{$va.weight}>"><{$va.name}></span>
+							</dt>
+							<dd class="col-xs-9 col-sm-8" id="sortable<{$key}><{$k}>">
+							<!-- <span class="c-red">已有：</span> class="name3" ids="<{$vaa['an_id']}>:"-->
+								<foreach name="va.rule" item="vaa" key="ke">
+								<if condition="$vaa['title'] neq null">
+									<span class="spans"><{$ke+1}>、<span class="name3" ids=",<{$vaa['id']}>" <if condition="$vaa['title'] eq '只能操作自己发布的'">style="color:orange;"</if>><{$vaa['title']}></span></span>
+								</if>
+								</foreach>
+							</dd>
+						<!-- </div> -->
+						</dl>
+					</foreach>
+					</dd>
+				</dl>
+			</foreach>
+		<!-- </div> -->
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button class="btn btn-success radius" id="admin-role-save"><i class="icon-ok"></i> 确定</button>
+		</div>
+	</div>
+</article>
+
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>jquery/1.9.1/jquery.min.js"></script>  
+<!-- <script type="text/javascript" src="<{$Think.const.LIB_URL}>icheck/jquery.icheck.min.js"></script> -->
+<script src="//cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+<script type="text/javascript" src="http://lib.h-ui.net/jquery.validation/1.14.0/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="http://lib.h-ui.net/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="http://lib.h-ui.net/jquery.validation/1.14.0/messages_zh.min.js"></script>  
+<script type="text/javascript" src="<{$Think.const.STATIC_URL}>h-ui/js/H-ui.js"></script> 
+<script type="text/javascript" src="<{$Think.const.STATIC_URL}>h-ui.admin/js/H-ui.admin.js"></script>
+<script src="//cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>  
+<!-- <script type="text/javascript" src="<{$Think.const.LIB_URL}>layui/layui.js"></script> -->
+<!--/_footer /作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+$(function(){
+	$('[type="radio"]').iCheck({ 
+		// labelHover : false,
+		cursor : true, 
+		checkboxClass: 'icheckbox_square-green',
+		radioClass: 'iradio_square-green',
+		increaseArea: '20%'
+	}); 
+	// var arrnp1=[],arrnp2=[];
+	// var pname1=$(".name1");
+	// for (var i = 0; i < pname1.length; i++) {
+	// 	arrnp1[i]=pname1.eq(i).attr('ids');
+	// }
+	// var pname2=$(".name2");
+	// for (var j = 0; j < pname2.length; j++) {
+	// 	arrnp2[j]=pname2.eq(j).attr('ids');
+	// }
+	// arrnp1=arrnp1.join(',');
+	// arrnp2=arrnp2.join(',');
+	// console.log(arrnp1);
+	// console.log(arrnp2);
+	$("#admin-role-save").click(function(event) {
+		var arrn1=[],arrn2=[],arrn3=[],arrnid1=[],arrnid2=[];
+		var name1=$(".name1");
+		for (var i = 0; i < name1.length; i++) {
+			arrnid1[i]=name1.eq(i).attr('ids');
+			arrn1[i]=name1.eq(i).attr('weight');
+		}
+		arrn1.sort(function(a,b){return a-b});
+		var name2=$(".name2");
+		for (var j = 0; j < name2.length; j++) {
+			arrnid2[j]=name2.eq(j).attr('ids');
+			arrn2[j]=name2.eq(j).attr('weight');
+		}
+		arrn2.sort(function(a,b){return a-b});
+		var name3=$(".name3");
+		for (var p = 0; p < name3.length; p++) {
+			arrn3[p]=name3.eq(p).attr('ids');
+		}
+		arrn1=arrn1.join(',');
+		arrn2=arrn2.join(',');
+		arrnid1=arrnid1.join(',');
+		arrnid2=arrnid2.join(',');
+		arrn3=arrn3.join('');
+		// console.log(arrnid1);
+		// console.log("changeWeight:"+arrn1);
+		/*var ind=-1;
+		while((ind=arrn3.indexOf(':',ind+1))!=-1){
+			console.log(ind);
+		}*/
+		arrn3=arrn3.replace(/:,/g, ":");
+		// console.log(arrn3);
+		// var bol1,bol2,bol3;
+		$.ajax({
+			url: "<{:U('sort_save')}>",
+			type:'post',
+			async:false,
+			dataType: 'json',
+			data: {name1:arrn1,name2:arrn2,name3:arrn3,arrnid1:arrnid1,arrnid2:arrnid2},
+			success:function(data){
+				// console.log(data);
+				// alert('保存成功');
+			    location.href="<{:U('admin_permission')}>";
+			},
+		});
+		// $.ajax({
+  //         type:"post",
+  //         url:"<{:U('admin_permission_add_data')}>",
+  //         // dataType:'json',
+  //         data:{roleName:$("#roleName").val(),roleContent:$("#roleContent").val(),user_Character:$("input:checked").val()},
+  //         success:function(data){
+  //           if (data==1) {
+  //           alert(data);
+  //       var mes=escape('添加成功');  //encodeURIComponent
+  //       parent.location.href="<{$Think.const.STATIC_URL}>html/success.html?mes="+mes+"&url=<{:U('admin_permission')}>";
+  //           }else{
+  //             alert('错误信息:'+data);
+  //             location.reload();
+  //           }
+  //         },
+  //       });
+	});
+
+	var arr=[],arr2=[],arr3=[];
+	$(".permission-list2 dd").each(function(i) {
+		// arr[arr.length]=$(this).eq(i).attr("id");
+		arr[i]=this.id;
+		$("#"+arr[i]).sortable({ cursor: "move",revert: true,});//慢速
+	});
+	$(".sortable2").each(function(i) {
+		arr2[i]=this.id;
+		$("#"+arr2[i]).sortable({ cursor: "move",revert: true,});
+	});
+	$(".permission-list").parent().each(function(i) {
+		arr3[i]=this.id;
+		$("#"+arr3[i]).sortable({ cursor: "move",revert: true,appendTo: $('#sortbox')});//慢速
+	});
+});
+</script>
+</body>
+</html>

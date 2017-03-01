@@ -1,0 +1,429 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>html5.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>respond.min.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>PIE_IE678.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>Hui-iconfont/1.0.7/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>zTree_v3/css/zTreeStyle/zTreeStyle.css"/>
+<link href="//cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>权限管理</title>
+<style type="text/css">
+	body{font-family: "微软雅黑";}
+	#bianji{background-color: #8B4513;opacity: 0.8;border: 1px solid #8B4513;}
+	#bianji:hover{background-color: #8B4513;opacity: 1}
+	#DataTables_Table_0_wrapper{padding-top: 10px;margin-left: 0px;}
+	.table-bg thead th{background-color: #e9ffee;}
+
+  #jiabox{margin-left: -10px;margin-top:-15px;position: relative;}
+  #jia{cursor: default;text-decoration: none;}
+  #zdivbox{height: 20px;width: 200px;position: absolute;top:12px;margin-left: -12px;z-index: 200;/* background-color: red; */}	
+  #zdiv{height:190px;width:200px;border-right:1px solid #e5e5e5; background-color:#ddffee; overflow: auto;margin-right: 20px;position: absolute;margin-left: -12px;margin-top: 0px;z-index: 199;}
+.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+</style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 权限管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" id="rotatetf">&#xe68f;</i></a></nav>
+<div class="page-container">
+<div id="jiabox" >
+    <a id="jia" onmouseover="showOrHide('zdivbox','block'),showOrHide('zdiv','block')"  onmouseout="showOrHide('zdivbox','none'),showOrHide('zdiv','none')">展开<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></a> 
+    <a id="guding">固定显示</a>
+    <div id="zdivbox" onmouseover="showOrHide('zdivbox','block'),showOrHide('zdiv','block')"  onmouseout="showOrHide('zdivbox','none'),showOrHide('zdiv','none')"></div>
+</div>
+  <div id="zdiv" class="" style="" onmouseover="showOrHide('zdivbox','block'),showOrHide('zdiv','block')" onmouseout="showOrHide('zdiv','none'),showOrHide('zdivbox','none')">
+    <ul id="treeDemo" class="ztree"></ul>
+  </div>
+	<div class="text-c">
+		<form class="Huiform" method="post" action="" target="_self">
+			<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+			<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+		</form><!-- &#xe60c; &#xe632;-->
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20" style="margin-top: 40px;"> <span class="l" style="margin-left: 20%;"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_permission_add('添加权限节点','<{$Think.const.SITE_URL}>Admin/Users/admin_permission_add.html')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限节点</a> <a id="bianji" class="btn btn-primary radius" href="<{:U('permission_sort')}>"><i class="Hui-iconfont">&#xe60c;</i>排序权限节点</a></span></div>
+	<div class="row text-c">
+		<h3 class="col-xs-12"><if condition="$ty eq null">全部<else/><{$ty}></if></h3>
+	</div>
+	<!-- <div class="col-xs-12 text-r" style="margin-bottom: 3px;"><a id="bianji" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe60c;</i>编辑权限节点</a></div> -->
+	<table class="table table-border table-bordered table-bg table-hover table-sort table-bg">
+		<thead>
+			<!-- <tr>
+				<th scope="col" colspan="6" class="text-c">
+				<if condition="$ty eq null">全部
+				<else/><{$ty}>
+				</if></th>
+			</tr> -->
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="cb-check-all"></th>
+				<th width="25">序号</th>
+				<th width="30">ID</th>
+				<th width="150">权限名称</th>
+				<th width="100">字段名</th>
+				<th width="80">操作</th>
+			</tr>
+		</thead>
+		<tbody id="sortable">
+			<foreach name="data" item="vo">
+			<tr class="text-c">
+				<td><input type="checkbox" value="<{$key+1}>" name=""></td>
+				<td></td>
+				<td><{$vo.id}></td>
+				<td><{$vo.title}></td>
+				<td><{$vo.name}></td>
+				<td><a title="编辑" href="javascript:;" onclick="admin_permission_edit('角色编辑','admin-permission-add.html','1','','310')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			</tr>
+			</foreach>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>layer/2.1/layer.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>layui/layui.js"></script>
+<!-- <script type="text/javascript" src="<{$Think.const.LIB_URL}>datatables/1.10.0/jquery.dataTables.min.js"></script> -->
+<script src="http://cdn.gbtags.com/datatables/1.10.5/js/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="<{$Think.const.STATIC_URL}>h-ui/js/H-ui.js"></script> 
+<script type="text/javascript" src="<{$Think.const.STATIC_URL}>h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>zTree_v3/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>zTree_v3/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>zTree_v3/js/jquery.ztree.exedit.js"></script>
+<!-- <script src="//cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>  -->
+<script type="text/javascript">
+layui.use(['layer','laypage']);
+
+var showtree=false;//hover开关
+$(document).ready(function(){
+    $("#guding").click(function(event) {
+        if (showtree==false) {
+            $("#zdiv").css('display', 'block');
+            showtree=true;
+            $(this).html('取消固定');
+        }else{
+           $("#zdiv").css('display', 'none');
+            showtree=false; 
+            $(this).html('固定显示');
+        }
+    });
+});
+function showOrHide(id,dp){
+    if (showtree==false) {
+        document.getElementById(id).style.display=dp;
+    }
+}
+var setting = {
+	view: {
+        addHoverDom: addHoverDom,
+        removeHoverDom: removeHoverDom,
+	    selectedMulti: false,
+	    // txtSelectedEnable: true
+	},
+    edit: {
+        enable: true,
+        showRemoveBtn: showRemoveBtn,
+        showRenameBtn: showRenameBtn
+    },
+    data: {
+        keep: {
+            parent:true,//子节点都删掉，还保留父节点状态
+            // leaf:true  //子文件无法添加子节点
+        },
+        simpleData: {
+            enable:true,
+            idKey: "id",
+            pIdKey: "pid",
+        }
+    },
+    callback: {
+        beforeClick: beforeClick,
+        beforeDrag:beforeDrag,
+        beforeRemove:beforeRemove,
+        onRename:onRename,
+    }
+};
+        function removeHoverDom(treeId, treeNode) {
+            $("#addBtn_"+treeNode.tId).unbind().remove();
+        };
+
+        var newCount = 1;
+        function addHoverDom(treeId, treeNode) {//hover显示添加按钮事件
+            var sObj = $("#" + treeNode.tId + "_span");
+            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+            if(treeNode.pid===null||treeNode.pid==0){
+                var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                    + "' title='add node' onfocus='this.blur();'></span>";
+                sObj.after(addStr);
+                var btn = $("#addBtn_"+treeNode.tId);
+                if (btn) btn.on("click", function(){//点击添加按钮事件
+                    var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                    var newName="new node" + (newCount++);
+                    $.ajax({
+                        url:"<{:U('tree_add')}>",
+                        type:'post',
+                        data:{npid:treeNode.id},
+                        dataType:'json',
+                        success:function(data){
+                            console.log(data);
+                            if(data){
+                                var xinde=zTree.addNodes(treeNode,{id:data, pid:treeNode.id, name:newName});
+                                //console.log(xinde);
+                                //console.log(xinde[0].tId);
+                                var newtid=$("#"+xinde[0].tId+"_span");
+                                newtid.html("<input class='rename'/>");
+                                var newinput=$("#"+xinde[0].tId+"_span input");
+                                newinput.focus();
+                                $("#addBtn_" + treeNode.tId).css("display","none");
+                                newinput.blur(function(event) {//失去焦点事件
+                                    var res;
+                                    if (newinput.val()=='') {
+                                        newtid.html(newName);
+                                        res=newName;
+                                    }else{
+                                        newtid.html(newinput.val());
+                                        xinde[0].name=newinput.val();
+                                        res=newinput.val();
+                                    }
+                                    $.ajax({
+                                        url:"<{:U('tree_rename')}>",
+                                        type:'post',
+                                        data:{rid:data,rpid:treeNode.id,rname:res},
+                                        dataType:'json',
+                                        success:function(data2){
+                                            if(data2==1){
+                                                //
+                                            }
+                                        }
+                                    }); 
+                                });
+                            }else{
+                                //
+                            }
+                        }
+                    });
+                    // console.log(newtid);
+                    return false;
+                });
+            }
+        };
+        function onRename(event, treeId, treeNode){
+            var tid=treeNode.id;
+            var name=treeNode.name;
+            $.ajax({
+                url:"<{:U('tree_rename2')}>",
+                type:'post',
+                data:{tid:tid,tname:name},
+                dataType:'json',
+                success:function(data){
+                    if(data==1){
+                        //
+                    }else{
+                        //
+                    }
+                }
+            });
+        }
+        function beforeRemove(treeId, treeNodes) {
+            var bol;
+            var did=treeNodes.id;
+            $.ajax({
+                url:"<{:U('tree_remove')}>",
+                type:'post',
+                data:{did:did},
+                dataType:'json',
+                async:false, //同步
+                success:function(data){
+                    if(data==1){
+                        bol=true;
+                    }else{
+                        bol=false;
+                        alert(data);
+                    }
+                }
+            });
+            // console.log(bol);
+            return bol;
+        }
+        function showRemoveBtn(treeId, treeNode) {
+            if (treeNode.pid===null) {
+                return false;
+            }else{
+                return true;
+            }
+        }
+        function showRenameBtn(treeId, treeNode) {
+            if (treeNode.pid===null) {
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+    function beforeDrag(treeId, treeNodes) {
+        return false;   //禁止拖拽
+    }
+    function beforeClick(treeId, treeNodes) {
+        // if (treeNodes.pid===null) {
+        if (treeNodes.pid==0||treeNodes.pid===null) {
+            return false;
+        }
+        var id=treeNodes.id;
+        // console.log(id);
+        // console.log(treeNodes.pid);
+        location.href='<{$Think.const.SITE_URL}>Admin/Users/ztree/id/'+id+'';
+    }
+
+    var zNodes=<{$zNodelist}>;
+
+    function setEdit() {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+    }
+    /*function reIframe(){
+        document.getElementById('testIframe').contentWindow.location.reload(true);
+    }*/
+    $(document).ready(function(){
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        // setEdit();
+    });
+
+    // var kgjia=1;//显示隐藏zdiv的开关
+
+    var CONSTANT = {
+        DATA_TABLES : {
+            DEFAULT_OPTION : { //DataTables初始化选项
+                language: {
+                    "sProcessing":   "处理中...",
+                    "sLengthMenu":   "每页 _MENU_ 项",
+                    "sZeroRecords":  "没有匹配结果",
+                    "sInfo":         "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+                    "sInfoEmpty":    "当前显示第 0 至 0 项，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "搜索:",
+                    "sUrl":          "",
+                    "sEmptyTable":     "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands":  ",",
+                    "oPaginate": {
+                        "sFirst":    "首页",
+                        "sPrevious": "上页",
+                        "sNext":     "下页",
+                        "sLast":     "末页",
+                        "sJump":     "跳转"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                //autoWidth: false,   //禁用自动调整列宽
+                //stripeClasses: ["odd", "even"],//为奇偶行加上样式，兼容不支持CSS伪类的场合
+                order: [],          //取消默认排序查询,否则复选框一列会出现小箭头
+                processing: false,  //隐藏加载提示,自行处理
+                //serverSide: true,   //启用服务器端分页
+                // searching: false    //禁用原生搜索
+            },
+            // COLUMN: {
+            //     CHECKBOX: { //复选框单元格
+            //         className: "td-checkbox",
+            //         orderable: false,
+            //         width: "30px",
+            //         data: null,
+            //         render: function (data, type, row, meta) {
+            //             return '<input type="checkbox" class="iCheck">';
+            //         }
+            //     }
+            // },
+            RENDER: {   //常用render可以抽取出来，如日期时间、头像等
+                ELLIPSIS: function (data, type, row, meta) {
+                    data = data||"";
+                    return '<span title="' + data + '">' + data + '</span>';
+                }
+            }
+        }
+};
+$(function(){
+	var t = $('.table-sort').DataTable($.extend(true,{},CONSTANT.DATA_TABLES.DEFAULT_OPTION, {
+		'pageLength': 3,
+		"columnDefs": [
+			{
+	            "searchable": false,
+	            "orderable": false,
+	            "targets": [0,1,5],
+            },
+		],
+		
+	}));
+    /*var t = $('.table-sort').DataTable({
+    	'pageLength': 2,
+		// "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+		// "bStateSave": true,//状态保存
+		"columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 1
+        }],
+        "order": [[2, 'asc']],
+		"language": {
+                 "lengthMenu": "每页 _MENU_ 条记录",
+                 "zeroRecords": "没有找到记录",
+                 "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                 "infoEmpty": "无记录",
+                 "infoFiltered": "(从 _MAX_ 条记录过滤)"
+         }
+	});*/
+
+    t.on('order.dt search.dt',
+    function() {
+        t.column(1, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+
+
+});
+
+/*管理员-权限-添加*/
+function admin_permission_add(title,url){
+	layer.open({
+		type: 2,
+		title: title,
+		shadeClose: true,//是否点击遮罩，关闭
+		// shade: false,
+		shade: [0.6, '#393D49'],//遮罩
+		maxmin: true, //开启最大化最小化按钮
+		area: ['80%', '95%'],
+		content: url
+    });
+}
+/*管理员-权限-编辑*/
+function admin_permission_edit(title,url,id,w,h){
+	// layer_show(title,url,w,h);
+}
+
+/*管理员-权限-删除*/
+function admin_permission_del(obj,id){
+	// layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
+	// 	$(obj).parents("tr").remove();
+	// 	layer.msg('已删除!',{icon:1,time:1000});
+	// });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>html5.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>respond.min.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>PIE_IE678.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>Hui-iconfont/1
+.0.7/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>icheck/icheck.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>zTree_v3/css/zTreeStyle/zTreeStyle.css"/>
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<style type="text/css">
+  .ty{ cursor: pointer;color: #00f;/*text-decoration:underline;*/}
+  .ty:hover{ color: red;}
+  #navdiv{line-height:2.6em;background-color:#f5f5f5;height: auto;}
+
+  #jiabox{margin-left: 25px;position: relative;}
+  #jia{cursor: default;text-decoration: none;}
+  #zdivbox{height: 20px;width: 200px;position: absolute;top:12px;margin-left: -12px;z-index: 200;}
+  #zdiv{height:190px;width:200px;border-right:1px solid #e5e5e5; background-color:#ddffee; overflow: auto;margin-right: 20px;position: absolute;margin-left: 21px;margin-top: 0px;z-index: 199;}
+
+  /*.rotatetf{transform: rotate(180deg);}*/
+  #DataTables_Table_0_wrapper{
+    padding-top: 185px;
+    margin-left: 15px;
+  }
+  @media screen and (max-width: 767px) {
+    .miaoshu{
+      display: none;
+    }
+    #DataTables_Table_0_wrapper{
+      padding-top: 0px;
+      margin-left: 0px;
+    }
+}
+</style>
+<title>建材列表</title>
+</head>
+<body class="pos-r">
+  <!-- <nav class="breadcrumb"> -->
+<div class="row breadcrumb" id="navdiv">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 产品列表 
+  <foreach name="ty" item="v">
+    <span class="c-gray en">&gt;</span><span onClick="tiao('<{$v.id}>')" class="ty"><{$v.name}></span>
+  </foreach>
+  <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;margin-right: 30px;" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</div>
+  <!-- </nav> -->
+<div class="row" style="margin-top: auto;">
+  <div id="jiabox" >
+    <a id="jia" onmouseover="showOrHide('zdivbox','block'),showOrHide('zdiv','block')"  onmouseout="showOrHide('zdivbox','none'),showOrHide('zdiv','none')">展开<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></a>
+    <div id="zdivbox" onmouseover="showOrHide('zdivbox','block'),showOrHide('zdiv','block')"  onmouseout="showOrHide('zdivbox','none'),showOrHide('zdiv','none')"></div>
+  </div>
+  <div id="zdiv" class="" style="" onmouseover="showOrHide('zdivbox','block'),showOrHide('zdiv','block')" onmouseout="showOrHide('zdiv','none'),showOrHide('zdivbox','none')">
+    <ul id="treeDemo" class="ztree"></ul>
+  </div>
+  <!-- <div class="col-sm-2" style="height:280px;border-right:1px solid #e5e5e5; background-color:#f5f5f5; overflow: auto;" >
+    <ul id="treeDemo" class="ztree"></ul>
+  </div> -->
+    <div class="page-container col-sm-12">
+      <div class="text-c"> 日期范围：
+        <input type="text" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'logmax\')||\'%y-%M-%d\'}'})" id="logmin" class="input-text Wdate" style="width:120px;">
+        -
+        <input type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'logmin\')}',maxDate:'%y-%M-%d'})" id="logmax" class="input-text Wdate" style="width:120px;">
+        <input type="text" name="" id="" placeholder=" 产品名称" style="width:250px" class="input-text">
+        <button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜产品</button>
+      </div>
+      <div class="cl pd-5 bg-1 bk-gray mt-20"> 
+        <span class="l" style="margin-left: 20%;">
+          <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+          <a class="btn btn-primary radius" href="<{:U('product_add')}>" ><i class="Hui-iconfont">&#xe600;</i> 添加产品</a>
+        </span> 
+        <span class="r">共有数据：<strong>54</strong> 条</span> 
+      </div>
+    </div>
+</div>
+<!-- <div class="mt-20" style="margin-left: 20px;"> -->
+<!-- <div  style="width: 100%"> -->
+    <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+    <thead>
+      <tr class="text-c">
+        <th width="40"><input name="" type="checkbox" value=""></th>
+        <th width="40">ID</th>
+        <th width="60">缩略图</th>
+        <th width="80">商品名称</th>
+        <th class="miaoshu">描述</th>
+        <th width="80">单价</th>
+        <th width="70">商品属性</th>
+        <th width="60">发布状态</th>
+        <th width="100">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+    <foreach name="data3" item="vo" id="data3">
+      <tr class="text-c va-m">
+        <td><input name="" type="checkbox" value=""></td>
+        <td><{$vo.id}></td>
+        <td><a onClick="product_show('<{$vo.goodsname}>','<{$Think.const.FILEIMG_URL}><{$vo.filepath}>','10001')" href="javascript:;">
+        <img width="60" class="product-thumb" src="<{$Think.const.FILEIMG_URL}><{$vo.filepath}>"></a></td>
+        <td class="text-c"><a style="text-decoration:none" onClick="product_show('哥本哈根橡木地板','product-show.html','10001')" href="javascript:;">
+        <img title="<{$vo.goodsname}>" src="<{$Think.const.PIC_URL}>7cf24a36695ffe7ada8100670f07d7dd.jpg"><div><{$vo.goodsname}><div></a></td>
+        <!-- <td class="text-c"><{$vo.text}></td> -->
+        <td class="text-c miaoshu"><{$vo['text']}></td>
+        <td><span class="price"><{$vo.curprice}></span> 元/<{$vo.unit}></td>
+        <td class="text-c"><switch name="vo.attributes">
+            <case value="1">推荐</case>
+            <case value="2">新上</case>
+            <case value="3">热卖</case>
+            <case value="4">促销</case>
+            <case value="5">包邮</case>
+            <case value="6">限时卖</case>
+            <case value="7">不参与会员折扣</case>
+          </switch></td>
+        <td class="td-status"><span class="label label-success radius">已发布</span></td>
+        <td class="td-manage">
+        <a style="text-decoration:none" onClick="product_stop(this,'10001')" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a> 
+        <a style="text-decoration:none" class="ml-5" onClick="product_edit('','<{:U('product_edit_add',array('id'=>$vo['id']))}>')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> 
+        <!-- <{$vo.id}> -->
+        <a style="text-decoration:none" class="ml-5" onClick="product_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+        </td>
+      </tr>
+    </foreach>
+    </tbody>
+  </table>
+<!-- </div> -->
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<{$Think.const.STATIC_URL}>h-ui/js/H-ui.js"></script> 
+<script type="text/javascript" src="<{$Think.const.STATIC_URL}>h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>layer/2.1/layer.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>zTree_v3/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>zTree_v3/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>zTree_v3/js/jquery.ztree.exedit.js"></script>
+<script type="text/javascript">
+function tiao(id){
+  location.href='<{$Think.const.SITE_URL}>Admin/Good/tree_list/id/'+id+'';
+}
+var setting = {
+  view: {
+    selectedMulti: false,
+    // txtSelectedEnable: true
+  },
+    edit: {
+        enable: true,
+        showRemoveBtn: false,
+    showRenameBtn: false
+    },
+    data: {
+      keep: {
+      parent:true,
+      leaf:true
+    },
+        simpleData: {
+            enable:true,
+            idKey: "id",
+            pIdKey: "pid",
+        }
+    },
+    callback: {
+        beforeClick: beforeClick,
+        beforeDrag:beforeDrag,
+    }
+};
+    function beforeDrag(treeId, treeNodes) {
+        return false;   //禁止拖拽
+    }
+    function beforeClick(treeId, treeNodes) {
+        // return false;
+        var id=treeNodes.id;
+        // console.log(id);
+        location.href='<{$Think.const.SITE_URL}>Admin/Good/tree_list/id/'+id+'';
+        // console.log('./tree_list/id/'+id+'');
+    }
+
+  var zNodes=<{$zNodelist}>;
+
+  function setEdit() {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+    }
+    /*function reIframe(){
+        document.getElementById('testIframe').contentWindow.location.reload(true);
+    }*/
+    $(document).ready(function(){
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        // setEdit();
+    });
+  $(function(){
+    $('.table-sort').dataTable({
+      "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+      "bStateSave": true,//状态保存
+      "aoColumnDefs": [
+        {"orderable":false,"aTargets":[0,7]}// 制定列不参与排序
+      ]
+    });
+
+    
+  });
+  function showOrHide(id,dp){
+    document.getElementById(id).style.display=dp;
+  }
+/*商品-查看ok*/
+function product_show(title,url,id){
+  var index = layer.open({
+    type: 2,
+    title: title,
+    area: ['100%', '100%'],
+    content: url
+  });
+  // layer.full(index);
+}
+/*商品-审核*/
+function product_shenhe(obj,id){
+  layer.confirm('审核文章？', {
+    btn: ['通过','不通过'], 
+    shade: false
+  },
+  function(){
+    $(obj).parents("tr").find(".td-manage").prepend('<a class="c-primary" onClick="product_start(this,id)" href="javascript:;" title="申请上线">申请上线</a>');
+    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
+    $(obj).remove();
+    layer.msg('已发布', {icon:6,time:1000});
+  },
+  function(){
+    $(obj).parents("tr").find(".td-manage").prepend('<a class="c-primary" onClick="product_shenqing(this,id)" href="javascript:;" title="申请上线">申请上线</a>');
+    $(obj).parents("tr").find(".td-status").html('<span class="label label-danger radius">未通过</span>');
+    $(obj).remove();
+      layer.msg('未通过', {icon:5,time:1000});
+  }); 
+}
+/*商品-下架*/
+function product_stop(obj,id){
+  layer.confirm('确认要下架吗？',function(index){
+    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="product_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
+    $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
+    $(obj).remove();
+    layer.msg('已下架!',{icon: 5,time:1000});
+  });
+}
+
+/*商品-发布*/
+function product_start(obj,id){
+  layer.confirm('确认要发布吗？',function(index){
+    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="product_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
+    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
+    $(obj).remove();
+    layer.msg('已发布!',{icon: 6,time:1000});
+  });
+}
+/*商品-申请上线*/
+function product_shenqing(obj,id){
+  $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">待审核</span>');
+  $(obj).parents("tr").find(".td-manage").html("");
+  layer.msg('已提交申请，耐心等待审核!', {icon: 1,time:2000});
+}
+/*商品-编辑ok*/
+function product_edit(title,url){
+  var ediWin = layer.open({
+    type: 2,
+    title: title,
+    area: ['100%', '100%'],
+    content: url
+  });
+  // layer.full(ediWin);
+}
+
+/*商品-删除*/
+function product_del(obj,id){
+  layer.confirm('确认要删除吗？',function(index){
+    $(obj).parents("tr").remove();
+    layer.msg('已删除!',{icon:1,time:1000});
+  });
+}
+
+</script>
+</body>
+</html>

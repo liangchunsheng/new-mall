@@ -1,0 +1,240 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<LINK rel="Bookmark" href="/favicon.ico" >
+<LINK rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>html5.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>respond.min.js"></script>
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>PIE_IE678.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>Hui-iconfont/1.0.7/iconfont.css" />
+<!-- <link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>icheck/icheck.css" /> -->
+<link href="//cdn.bootcss.com/iCheck/1.0.2/skins/square/_all.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.STATIC_URL}>h-ui.admin/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<{$Think.const.LIB_URL}>layui/css/layui.css" />
+
+<!--[if IE 6]>
+<script type="text/javascript" src="http://<{$Think.const.LIB_URL}>.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+<title>新建网站角色 - 管理员管理 - H-ui.admin v2.3</title>
+<meta name="keywords" content="H-ui.admin v2.3,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v2.3，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+<style type="text/css">
+	#btn_pers{background-color: #43CD80;opacity: 0.8}
+	#btn_pers:hover{background-color: #43CD80;opacity: 1}
+	.radios{/*background-color: red;*/}
+	/*lable.valid{color:green;}*/
+	label.valid {
+		background: url('<{$Think.const.IMG_URL}>checked.gif') no-repeat;
+		display: block;
+		width: 16px;
+		height: 16px;
+	}
+	/*.novaild label.valid{display: none;}*/
+</style>
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-admin-role-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>权限节点名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="roleName" name="roleName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>权限URL地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="roleContent" name="roleContent">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-11 col-sm-offset-1 col-xs-offset-1">
+				<span class="c-red">若权限节点名称为 <span class="c-orange">“只能操作自己发布的”</span>，请先勾选下面栏目，再点击此按钮： &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button class="btn btn-primary radius" id="btn_pers">personal</button>
+			</div>
+		</div>
+		<div class="row cl">
+			<span class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>权限网站角色：</span>
+			<!-- <div class="formControls col-xs-8 col-sm-10"></div> -->
+		</div>
+		<div class="row cl">
+			<div class="formControls col-xs-12 col-sm-10 col-sm-offset-1 novaild">
+				<foreach name="role0" item="vo">
+					<dl class="permission-list">
+					<dt class="p_first_dt" style="background-color: #ddd;">
+						<label><{$vo.name}></label>
+					</dt>
+				<foreach name="vo.child" item="va" key="k">
+					<dd>
+						<dl class="cl permission-list2">
+						<!-- <div class="row"> -->
+							<dt class="col-xs-3 col-sm-4">
+								<input type="radio" value="<{$va.id}>" name="user_Character" id="user-Character-1-0" <if condition="$va.id eq $role0[0]['child'][0]['id']">checked</if>> &nbsp;&nbsp;<{$va.name}>
+							</dt>
+							<dd class="col-xs-9 col-sm-8">
+							<!-- <span class="c-red">已有：</span> -->
+								<foreach name="va.rule" item="vaa" key="ke">
+								<if condition="$vaa['title'] neq null">
+									<label <if condition="$vaa['title'] eq '只能操作自己发布的'">class="c-orange"</if>><{$ke+1}>、<{$vaa['title']}></label>
+								</if>
+								</foreach>
+							</dd>
+						<!-- </div> -->
+						</dl>
+					</dd>
+				</foreach>
+				</dl>
+				</foreach>
+				<!-- <dl class="permission-list">
+					<dt class="p_first_dt" style="background-color: #ddd;">
+						<label>资讯管理</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+						<div class="row">
+							<dt class="col-xs-3 col-sm-4">
+								<label class="radios"><input type="radio" value="" name="user-Character" id="user-Character-0-1" checked> &nbsp;&nbsp;栏目管理</label>
+							</dt>
+							<dd class="col-xs-9 col-sm-8">
+								<label class="">1、添加</label>
+								<label class="">2、修改</label>
+								<label class="">3、删除</label>
+								<label class="">4、查看</label>
+								<label class="">5、审核</label>
+								<label class="c-orange">6、只能操作自己发布的</label>
+							</dd>
+						</div>
+						</dl>
+						<dl class="cl permission-list2">
+						<div class="row">
+							<dt class="col-xs-3 col-sm-4">
+								<label class="radios"><input type="radio" value="" name="user-Character" id="user-Character-0-1"> &nbsp;&nbsp;文章管理</label>
+							</dt>
+							<dd class="col-xs-9 col-sm-8">
+								<label class="">1、添加</label>
+								<label class="">2、修改</label>
+								<label class="">3、删除</label>
+								<label class="">4、查看</label>
+								<label class="">5、审核</label>
+								<label class="c-orange">6、只能操作自己发布的</label>
+							</dd>
+						</div>
+						</dl>
+					</dd>
+				</dl>
+				<dl class="permission-list">
+					<dt class="p_first_dt" style="background-color: #ddd;">
+						<label>用户中心</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+						<div class="row">
+							<dt class="col-xs-3 col-sm-4">
+								<label class="radios"><input type="radio" value="" name="user-Character" id="user-Character-1-0"> &nbsp;&nbsp;用户管理</label>
+							</dt>
+							<dd class="col-xs-9 col-sm-8">
+								<label class="">1、添加</label>
+								<label class="">2、修改</label>
+								<label class="">3、删除</label>
+								<label class="">4、查看</label>
+								<label class="">5、审核</label>
+								<label class="c-orange">6、只能操作自己发布的</label>
+							</dd>
+						</div>
+						</dl>
+					</dd>
+				</dl> -->
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<script type="text/javascript" src="<{$Think.const.LIB_URL}>jquery/1.9.1/jquery.min.js"></script>  
+<!-- <script type="text/javascript" src="<{$Think.const.LIB_URL}>icheck/jquery.icheck.min.js"></script> -->
+<script src="//cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+<script type="text/javascript" src="http://lib.h-ui.net/jquery.validation/1.14.0/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="http://lib.h-ui.net/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="http://lib.h-ui.net/jquery.validation/1.14.0/messages_zh.min.js"></script>  
+<!-- <script type="text/javascript" src="<{$Think.const.LIB_URL}>layui/layui.js"></script> -->
+<!--/_footer /作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+$(function(){
+	$('[type="radio"]').iCheck({ 
+		// labelHover : false,
+		cursor : true, 
+		checkboxClass: 'icheckbox_square-green',
+		radioClass: 'iradio_square-green',
+		increaseArea: '20%'
+	}); 
+
+	$("#form-admin-role-add").validate({
+		rules:{
+			roleName:{
+				required:true,
+			},
+			roleContent:{
+				required:true,
+			},
+
+		},
+		// onkeyup:false,
+		// focusInvalid:false,
+		// focusCleanup:true,
+
+    	success:"valid",
+		// success:function(label) {
+    // label.html("&nbsp;").addClass("checked");
+    // label.addClass("valid").text("OK").css('color', 'green');
+		// },
+		submitHandler:function(form){
+			// $(form).ajaxSubmit();
+			// var index = parent.layer.getFrameIndex(window.name);
+			// parent.$('#btn-refresh').click();
+			// parent.layer.close(index);
+			$.ajax({
+		      type:"post",
+		      url:"<{:U('admin_permission_add_data')}>",
+		      // dataType:'json',
+		      data:{roleName:$("#roleName").val(),roleContent:$("#roleContent").val(),user_Character:$("input:checked").val()},
+		      success:function(data){
+		        if (data==1) {
+		      	alert(data);
+				var mes=escape('添加成功');  //encodeURIComponent
+				parent.location.href="<{$Think.const.STATIC_URL}>html/success.html?mes="+mes+"&url=<{:U('admin_permission')}>";
+		        }else{
+		          alert('错误信息:'+data);
+		          location.reload();
+		        }
+		      },
+		    });
+		}
+	});
+
+	$('#btn_pers').click(function(event) {
+		$('#roleName').val('只能操作自己发布的');
+		return false;
+	});
+
+
+});
+</script>
+</body>
+</html>
